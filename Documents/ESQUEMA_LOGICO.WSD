@@ -1,0 +1,314 @@
+@startuml Analítica_Bienestar_Psicoemocional
+' ============================================
+' ESQUEMA DIMENSIONAL - STAR SCHEMA
+' Proyecto: Analítica de Datos - Ingeniería en Sistemas
+' ============================================
+
+skinparam class {
+  BackgroundColor White
+  BorderColor Black
+  AttributeFontSize 10
+  AttributeFontName Consolas
+}
+skinparam linetype ortho
+skinparam shadowing false
+
+title Esquema Analítico: Bienestar Psicoemocional Laboral
+footer Componente CPAD010 - V Año Ingeniería en Sistemas
+
+' ============================================
+' DIMENSIONES
+' ============================================
+
+class "dim_usuario" as DimUser {
+  -- PK --
+  +id_usuario : INT [PK]
+  -- Atributos demográficos --
+  +edad : INT
+  +edad_etiqueta : VARCHAR(20)
+  +id_genero : INT
+  +genero : VARCHAR(15)
+  -- Atributos laborales --
+  +cargo : VARCHAR(50)
+  +contrato : VARCHAR(30)
+  +antiguedad : VARCHAR(20)
+  +antiguedad_years : DECIMAL(4,2)
+  +turno : VARCHAR(15)
+  -- Atributos organizacionales --
+  +id_empresa : INT
+  +nombre_empresa : VARCHAR(100)
+  +id_sector : INT
+  +sector : VARCHAR(50)
+  +id_departamento : INT
+  +departamento_area : VARCHAR(80)
+  +centro : VARCHAR(50)
+  -- Jerarquías geográficas --
+  +id_comunidad : INT
+  +id_provincia : INT
+  +id_empresa_padre : INT
+  +empresa_padre : VARCHAR(100)
+  -- Metadatos --
+  +fecha_carga : DATETIME
+  +activo : BOOLEAN
+}
+
+class "dim_tiempo" as DimTime {
+  -- PK --
+  +id_fecha : INT [PK]
+  -- Componentes --
+  +fecha_completa : DATE
+  +dia_mes : INT
+  +mes : INT
+  +nombre_mes : VARCHAR(15)
+  +trimestre : INT
+  +semestre : INT
+  +anio : INT
+  -- Derivados analíticos --
+  +es_fin_semana : BOOLEAN
+  +es_festivo : BOOLEAN
+  +semana_anio : INT
+  +nombre_trimestre : VARCHAR(20)
+  -- Rangos --
+  +rango_edad : VARCHAR(20)
+  +rango_antiguedad : VARCHAR(20)
+}
+
+class "dim_servicio" as DimService {
+  -- PK --
+  +id_servicio : INT [PK]
+  -- Clasificación --
+  +tipo_servicio : ENUM('test','entrenamiento','foro','llamada','chat','taller')
+  +categoria : VARCHAR(30)
+  +subcategoria : VARCHAR(50)
+  -- Metadata --
+  +nombre_servicio : VARCHAR(100)
+  +duracion_estimada_min : INT
+  +modalidad : ENUM('presencial','virtual','hibrido')
+  +nivel_interaccion : ENUM('bajo','medio','alto')
+  -- Indicadores --
+  +requiere_psicologo : BOOLEAN
+  +es_evaluativo : BOOLEAN
+}
+
+class "dim_area_psicoemocional" as DimArea {
+  -- PK --
+  +id_area : INT [PK]
+  -- Clasificación --
+  +codigo_area : VARCHAR(20)
+  +nombre_area : VARCHAR(80)
+  +descripcion : TEXT
+  +tipo_bienestar : ENUM('Psicológico','Laboral','General')
+  -- Agrupación analítica --
+  +grupo_principal : VARCHAR(50)
+  +orden_visualizacion : INT
+  +es_dimension_secundaria : BOOLEAN
+  -- Escala de medición --
+  +escala_evaluacion : VARCHAR(30)
+  +valores_posibles : VARCHAR(50)
+}
+
+class "dim_estado_psicoemocional" as DimState {
+  -- PK --
+  +id_estado : INT [PK]
+  -- Valores --
+  +codigo_color : ENUM('Verde','Naranja','Fresa')
+  +etiqueta : VARCHAR(20)
+  +valor_numerico : INT
+  +descripcion : VARCHAR(200)
+  -- Ordenamiento --
+  +nivel_bienestar : INT
+  +es_optimo : BOOLEAN
+  +requiere_intervencion : BOOLEAN
+}
+
+class "dim_tipo_evolucion" as DimEvolucion {
+  -- PK --
+  +id_evolucion : INT [PK]
+  +tipo_evolucion : ENUM('Positiva','Neutra','Negativa','-')
+  +descripcion : VARCHAR(100)
+  +valor_impacto : DECIMAL(3,2)
+  +color_asociado : VARCHAR(10)
+}
+
+' ============================================
+' HECHOS - FACT TABLES
+' ============================================
+
+class "fact_seguimiento_usuario" as FactSeguimiento {
+  -- PK Compuesta --
+  +id_seguimiento : INT [PK]
+  -- FKs a dimensiones --
+  +id_usuario : INT [FK]
+  +id_fecha_seguimiento : INT [FK]
+  +id_estado_inicial : INT [FK]
+  +id_estado_final : INT [FK]
+  +id_area_principal : INT [FK]
+  +id_evolucion : INT [FK]
+  -- Métricas principales --
+  +estado_inicial_valor : INT
+  +estado_final_valor : INT
+  +delta_bienestar : INT
+  +dias_desde_ultimo_seguimiento : INT
+  -- Flags analíticos --
+  +es_primera_evaluacion : BOOLEAN
+  +es_recuperacion : BOOLEAN
+  +flag_alerta : BOOLEAN
+  -- Metadatos --
+  +fecha_carga : DATETIME
+  +version_registro : INT
+}
+
+class "fact_detalle_estado_dimension" as FactDetalleEstado {
+  -- PK --
+  +id_detalle : INT [PK]
+  -- FKs --
+  +id_seguimiento : INT [FK]
+  +id_usuario : INT [FK]
+  +id_fecha : INT [FK]
+  +id_area : INT [FK]
+  +id_estado_inicial : INT [FK]
+  +id_estado_final : INT [FK]
+  +id_evolucion : INT [FK]
+  -- Métricas --
+  +puntaje_inicial : DECIMAL(4,2)
+  +puntaje_final : DECIMAL(4,2)
+  +variacion_puntaje : DECIMAL(4,2)
+  +peso_relativo : DECIMAL(3,2)
+  -- Indicadores --
+  +es_dimension_critica : BOOLEAN
+  +requiere_atencion : BOOLEAN
+}
+
+class "fact_interaccion_servicio" as FactInteraccion {
+  -- PK --
+  +id_interaccion : INT [PK]
+  -- FKs --
+  +id_seguimiento : INT [FK]
+  +id_usuario : INT [FK]
+  +id_fecha : INT [FK]
+  +id_servicio : INT [FK]
+  -- Métricas de uso --
+  +duracion_real_min : INT
+  +frecuencia_acceso : INT
+  +calificacion_usuario : DECIMAL(3,2)
+  +completitud : DECIMAL(3,2)
+  -- Contexto --
+  +dispositivo : VARCHAR(30)
+  +canal_acceso : VARCHAR(20)
+  +es_recomendado : BOOLEAN
+}
+
+class "fact_absentismo" as FactAbsentismo {
+  -- PK --
+  +id_registro_absentismo : INT [PK]
+  -- FKs --
+  +id_seguimiento : INT [FK]
+  +id_usuario : INT [FK]
+  +id_fecha_inicio : INT [FK]
+  +id_fecha_final : INT [FK]
+  -- Métricas --
+  +dias_ausente : INT
+  +justificado : BOOLEAN
+  +relacionado_salud_mental : BOOLEAN
+  -- Clasificación --
+  +tipo_absentismo : VARCHAR(30)
+  +gravedad : ENUM('Leve','Moderado','Grave')
+  +comentario : TEXT
+}
+
+class "fact_solicitud_psicologo" as FactSolicitudPsicologo {
+  -- PK --
+  +id_solicitud : INT [PK]
+  -- FKs --
+  +id_seguimiento : INT [FK]
+  +id_usuario : INT [FK]
+  +id_fecha_solicitud : INT [FK]
+  +id_fecha_prevista : INT [FK]
+  -- Estado del proceso --
+  +solicita : ENUM('SI','NO')
+  +tiene_psicologo_asignado : ENUM('SI','NO')
+  +usuario_asiste : ENUM('SI','NO')
+  +solicitud_empresa : ENUM('SI','NO','N/A')
+  -- Métricas --
+  +n_solicitudes_acumuladas : INT
+  +sesiones_consumidas : INT
+  +sesiones_pendientes : INT
+  +tiempo_espera_dias : INT
+  -- Clasificación --
+  +tipo_usuario : ENUM('Alta','Tratamiento','Seguimiento')
+  +prioridad : ENUM('Baja','Media','Alta','Urgente')
+}
+
+' ============================================
+' RELACIONES (Star Schema)
+' ============================================
+
+' FactSeguimiento --> Dimensiones principales
+FactSeguimiento "1" *-- "N" DimUser : id_usuario >
+FactSeguimiento "1" *-- "N" DimTime : id_fecha_seguimiento >
+FactSeguimiento "1" *-- "N" DimState : estado_inicial/final >
+FactSeguimiento "1" *-- "N" DimArea : area_principal >
+FactSeguimiento "1" *-- "N" DimEvolucion : tipo_evolucion >
+
+' FactDetalleEstado --> Dimensiones (granularidad fina)
+FactDetalleEstado "1" *-- "N" FactSeguimiento : id_seguimiento >
+FactDetalleEstado "1" *-- "N" DimArea : id_area >
+FactDetalleEstado "1" *-- "N" DimState : estados >
+FactDetalleEstado "1" *-- "N" DimTime : id_fecha >
+
+' FactInteraccion --> Dimensiones de servicio
+FactInteraccion "1" *-- "N" FactSeguimiento : id_seguimiento >
+FactInteraccion "1" *-- "N" DimService : id_servicio >
+FactInteraccion "1" *-- "N" DimTime : id_fecha >
+
+' FactAbsentismo y FactSolicitudPsicologo
+FactAbsentismo "1" *-- "N" FactSeguimiento : id_seguimiento >
+FactAbsentismo "1" *-- "N" DimTime : fechas >
+
+FactSolicitudPsicologo "1" *-- "N" FactSeguimiento : id_seguimiento >
+FactSolicitudPsicologo "1" *-- "N" DimTime : fechas_solicitud >
+
+' ============================================
+' NOTAS ANALÍTICAS
+' ============================================
+
+note right of FactSeguimiento
+  <b>Tabla de hechos principal</b>
+  • Granularidad: 1 registro por usuario por período de seguimiento
+  • Permite análisis de evolución temporal
+  • Base para hipótesis H1, H3, H4
+end note
+
+note right of FactDetalleEstado
+  <b>Detalle por dimensión psicoemocional</b>
+  • Permite drill-down por área específica
+  • Soporta análisis de correlación entre dimensiones
+  • Clave para hipótesis H2 y H5
+end note
+
+note right of DimUser
+  <b>Dimensión usuario enriquecida</b>
+  • Incluye atributos derivados para segmentación
+  • Soporta análisis por jerarquías organizacionales
+  • Compatible con privacidad: datos agregados disponibles
+end note
+
+note bottom of DimTime
+  <b>Dimensión tiempo analítica</b>
+  • Soporta comparativas trimestrales/anuales
+  • Facilita análisis de estacionalidad
+  • Incluye flags para segmentación temporal
+end note
+
+' ============================================
+' ÍNDICES SUGERIDOS PARA OPTIMIZACIÓN
+' ============================================
+
+note right of FactSeguimiento
+  <b>Índices recomendados:</b>
+  • IDX_factseg_usuario_fecha (id_usuario, id_fecha)
+  • IDX_factseg_evolucion (id_evolucion, id_area)
+  • IDX_factseg_alerta (flag_alerta, id_fecha)
+end note
+
+@enduml

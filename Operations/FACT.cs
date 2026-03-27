@@ -38,21 +38,7 @@ namespace Operations
         public int Cantidad { get; set; }
         public decimal MontoBruto { get; set; }
         public decimal Descuento { get; set; }
-        public DateTime? UpdateAt { get; set; } // Fecha del Encabezado (para Incremental)
-
-        public override List<SalesFactQuery> Get<SalesFactQuery>()
-        {
-            var dt = this.MDataMapper?.GDatos.TraerDatosSQL(GetQuery());
-            if (dt != null && dt.Rows.Count > 0)
-            {
-                return AdapterUtil.ConvertDataTable<SalesFactQuery>(dt, this);
-            }
-            else
-            {
-                return [];
-            }
-
-        }
+        public DateTime? UpdateAt { get; set; } // Fecha del Encabezado (para Incremental)     
 
         public override string GetQuery()
         {

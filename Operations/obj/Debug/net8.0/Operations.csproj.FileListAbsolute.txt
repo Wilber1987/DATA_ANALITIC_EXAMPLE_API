@@ -64,3 +64,4 @@ d:\repos\NETCORE\ETLService\Operations\obj\Debug\net8.0\Operations.dll
 d:\repos\NETCORE\ETLService\Operations\obj\Debug\net8.0\refint\Operations.dll
 d:\repos\NETCORE\ETLService\Operations\obj\Debug\net8.0\Operations.pdb
 d:\repos\NETCORE\ETLService\Operations\obj\Debug\net8.0\ref\Operations.dll
+d:\repos\NETCORE\ETLService\Operations\obj\Debug\net8.0\Operations.sourcelink.json
