@@ -1,0 +1,285 @@
+{
+  "format": 1,
+  "restore": {
+    "d:\\repos\\NETCORE\\ETLService\\ETLService\\ETLService.csproj": {}
+  },
+  "projects": {
+    "d:\\repos\\NETCORE\\ETLService\\AppCore\\AppCore.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "d:\\repos\\NETCORE\\ETLService\\AppCore\\AppCore.csproj",
+        "projectName": "AppCore",
+        "projectPath": "d:\\repos\\NETCORE\\ETLService\\AppCore\\AppCore.csproj",
+        "packagesPath": "C:\\Users\\wilbe\\.nuget\\packages\\",
+        "outputPath": "d:\\repos\\NETCORE\\ETLService\\AppCore\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\wilbe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "BenchmarkDotNet": {
+              "target": "Package",
+              "version": "[0.13.7, )"
+            },
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.104.2, )"
+            },
+            "Cronos": {
+              "target": "Package",
+              "version": "[0.7.1, )"
+            },
+            "DinkToPdf": {
+              "target": "Package",
+              "version": "[1.0.8, )"
+            },
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
+            "Microsoft.AspNet.WebApi.Client": {
+              "target": "Package",
+              "version": "[5.2.9, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.Extensions.Hosting.Abstractions": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Identity.Client": {
+              "target": "Package",
+              "version": "[4.58.1, )"
+            },
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[8.0.33, )"
+            },
+            "MySqlConnector": {
+              "target": "Package",
+              "version": "[2.3.7, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[8.0.3, )"
+            },
+            "Renci.SshNet.Async": {
+              "target": "Package",
+              "version": "[1.4.0, )"
+            },
+            "SSH.NET": {
+              "target": "Package",
+              "version": "[2024.1.0, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.6, )"
+            },
+            "WkHtmlToPdf.NetCore": {
+              "target": "Package",
+              "version": "[3.0.2, )"
+            },
+            "itext7": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "itext7.bouncy-castle-adapter": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "itext7.pdfhtml": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.414/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "d:\\repos\\NETCORE\\ETLService\\ETLService\\ETLService.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "d:\\repos\\NETCORE\\ETLService\\ETLService\\ETLService.csproj",
+        "projectName": "ETLService",
+        "projectPath": "d:\\repos\\NETCORE\\ETLService\\ETLService\\ETLService.csproj",
+        "packagesPath": "C:\\Users\\wilbe\\.nuget\\packages\\",
+        "outputPath": "d:\\repos\\NETCORE\\ETLService\\ETLService\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\wilbe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "d:\\repos\\NETCORE\\ETLService\\Operations\\Operations.csproj": {
+                "projectPath": "d:\\repos\\NETCORE\\ETLService\\Operations\\Operations.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.4.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.414/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "d:\\repos\\NETCORE\\ETLService\\Operations\\Operations.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "d:\\repos\\NETCORE\\ETLService\\Operations\\Operations.csproj",
+        "projectName": "Operations",
+        "projectPath": "d:\\repos\\NETCORE\\ETLService\\Operations\\Operations.csproj",
+        "packagesPath": "C:\\Users\\wilbe\\.nuget\\packages\\",
+        "outputPath": "d:\\repos\\NETCORE\\ETLService\\Operations\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\wilbe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "d:\\repos\\NETCORE\\ETLService\\AppCore\\AppCore.csproj": {
+                "projectPath": "d:\\repos\\NETCORE\\ETLService\\AppCore\\AppCore.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.414/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

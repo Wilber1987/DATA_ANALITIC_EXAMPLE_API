@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <main></main>
+    <script type="module">
+        import { WReportComponent, PageType } from "../../.../WReportComponent.js";
+        import { data } from "./data.js";
+        const datas = [
+            {
+                "squadName": "Super Hero Squad",
+                "homeTown": "Metro City",
+                "formed": 2016,
+                "secretBase": "Super tower",
+                "active": true,
+                "members": [
+                    {
+                        "name": "Molecule Man",
+                        "age": 29,
+                        "secretIdentity": "Dan Jukes",
+                        "powers": [
+                            "Radiation resistance",
+                            "Turning tiny",
+                            "Radiation blast"
+                        ]
+                    },
+                    {
+                        "name": "Madame Uppercut",
+                        "age": 39,
+                        "secretIdentity": "Jane Wilson",
+                        "powers": [
+                            "Million tonne punch",
+                            "Damage resistance",
+                            "Superhuman reflexes"
+                        ]
+                    },
+                    {
+                        "name": "Eternal Flame",
+                        "age": 1000000,
+                        "secretIdentity": "Unknown",
+                        "powers": [
+                            "Immortality",
+                            "Heat Immunity",
+                            "Inferno",
+                            "Teleportation",
+                            "Interdimensional travel"
+                        ]
+                    }
+                ]
+            }, {
+                "squadName": "Super Hero Squad",
+                "homeTown": "Metro City",
+                "formed": 2016,
+                "secretBase": "Super tower",
+                "active": true,
+                "members": [
+                    {
+                        "name": "Molecule Man",
+                        "age": 29,
+                        "secretIdentity": "Dan Jukes",
+                        "powers": [
+                            "Radiation resistance",
+                            "Turning tiny",
+                            "Radiation blast",
+                            [{
+                                name: 20
+                            }]
+                        ]
+                    },
+                    {
+                        "name": "Madame Uppercut",
+                        "age": 39,
+                        "secretIdentity": "Jane Wilson",
+                        "powers": [
+                            "Million tonne punch",
+                            "Damage resistance",
+                            "Superhuman reflexes"
+                        ]
+                    },
+                    {
+                        "name": "Eternal Flame",
+                        "age": 1000000,
+                        "secretIdentity": "Unknown",
+                        "powers": [
+                            "Immortality",
+                            "Heat Immunity",
+                            "Inferno",
+                            "Teleportation",
+                            "Interdimensional travel"
+                        ]
+                    }
+                ]
+            }
+        ]
+        document.querySelector("main").append(
+            new WReportComponent({ 
+                Dataset: data,
+                Header: "HEADER",
+                SubHeader: "SUB HEADER - Test propierty...",
+                Logo: "../../../Media/Image/logo.png",
+                PageType: PageType.A4
+             })
+        )
+    </script>
+</body>
+
+</html>
