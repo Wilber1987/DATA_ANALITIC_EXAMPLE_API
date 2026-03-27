@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Operations.DataGenerator.Entities.Dimensions;
 using Operations.DataGenerator.Entities.Facts;
 using APPCORE;
@@ -50,7 +49,6 @@ namespace Operations.DataGenerator
     public class SyntheticDataGenerator
     {
         private readonly GeneratorConfig _config;
-        private readonly ILogger? _logger;
         private readonly Random _random;
 
         // Caché de dimensiones (cargadas una vez)
@@ -63,10 +61,9 @@ namespace Operations.DataGenerator
         // Empleados generados en memoria
         private List<EmpleadoModel> _empleados = new();
 
-        public SyntheticDataGenerator(GeneratorConfig config, ILogger? logger = null)
+        public SyntheticDataGenerator(GeneratorConfig config)
         {
-            _config = config;
-            _logger = logger;
+            _config = config;           
             _random = new Random(config.Seed);
         }
 
@@ -530,7 +527,7 @@ namespace Operations.DataGenerator
             Log($"✓ Interacciones: {totalInteracciones}");
         }
 
-        private void Log(string message) => _logger?.LogInformation(message);
-        private void LogError(Exception ex, string message) => _logger?.LogError(ex, message);
+        private void Log(string message) => Console.Write(message);
+        private void LogError(Exception ex, string message) => Console.Write(message);
     }
 }
