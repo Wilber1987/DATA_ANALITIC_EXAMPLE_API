@@ -751,6 +751,40 @@ CREATE TABLE etl_config (
 );
 GO
 
+
+CREATE TABLE dbo.Log (
+	Id_Log int IDENTITY(1,1) NOT NULL,
+	LogType nvarchar(MAX) COLLATE Modern_Spanish_CI_AS NULL,
+	Fecha datetime NULL,
+	message varchar(MAX) COLLATE Modern_Spanish_CI_AS NULL,
+	body nvarchar(MAX) COLLATE Modern_Spanish_CI_AS NULL,
+	CONSTRAINT PK_CaseTable_Agendas PRIMARY KEY (Id_Log)
+);
+
+
+-- ============================================================================
+-- CORRECCIÓN DE PRECISIÓN DECIMAL EN TABLAS EXISTENTES
+-- ============================================================================
+
+-- 1. Fact_Detalle_Estado_Dimension - Ajustar Variacion_Puntaje para negativos
+ALTER TABLE Fact_Detalle_Estado_Dimension 
+ALTER COLUMN Variacion_Puntaje DECIMAL(5,2);
+GO
+
+-- 2. Fact_Interaccion_Servicio - Ajustar Completitud para permitir 100.00
+ALTER TABLE Fact_Interaccion_Servicio 
+ALTER COLUMN Completitud DECIMAL(5,2);
+GO
+
+-- 3. Fact_Interaccion_Servicio - Ajustar Calificacion_Usuario si es necesario
+ALTER TABLE Fact_Interaccion_Servicio 
+ALTER COLUMN Calificacion_Usuario DECIMAL(3,2);
+GO
+
+
+GO
+
+
 -- ============================================================================
 -- COMENTARIOS FINALES Y RECOMENDACIONES DE USO
 -- ============================================================================

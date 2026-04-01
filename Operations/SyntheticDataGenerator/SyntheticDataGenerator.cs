@@ -25,7 +25,7 @@ namespace Operations.SyntheticDataGenerator
     }
 
     // ========================================================================
-    // MODELO INTERNO DE EMPLEADO (para lógica de generación)
+    // MODELO INTERNO DE EMPLEADO
     // ========================================================================
     public class EmpleadoModel
     {
@@ -52,14 +52,12 @@ namespace Operations.SyntheticDataGenerator
         private readonly GeneratorConfig _config;
         private readonly Random _random;
 
-        // Caché de dimensiones (cargadas una vez)
         private List<Dim_Estado_Psicoemocional>? _estados;
         private List<Dim_Area_Psicoemocional>? _areas;
         private List<Dim_Servicio>? _servicios;
         private List<Dim_Tipo_Evolucion>? _evoluciones;
         private Dictionary<string, int>? _colorToEstadoId;
 
-        // Empleados generados en memoria
         private List<EmpleadoModel> _empleados = new();
 
         public SyntheticDataGeneratorOperation(GeneratorConfig config)
@@ -100,48 +98,60 @@ namespace Operations.SyntheticDataGenerator
                     EndDate = endDate
                 }.Save();
             }
+            else
+            {
+                Console.WriteLine($"⚠️ Rango [{startDate:yyyy-MM-dd} a {endDate:yyyy-MM-dd}] YA PROCESADO");
+            }
         }
 
         public async Task EjecutarGeneracionAsync()
         {
             Log("=== INICIANDO GENERACIÓN CON ENTITYCLASS ===");
 
-            // 1. Cargar dimensiones desde BD usando EntityClass.Get<T>()
             await CargarDimensionesAsync();
-            Log($"Dimensiones cargadas: {_estados?.Count ?? 0} estados, {_areas?.Count ?? 0} áreas");
+            Log($"✓ Dimensiones: {_estados?.Count ?? 0} estados, {_areas?.Count ?? 0} áreas, {_servicios?.Count ?? 0} servicios");
 
-            // 2. Generar y guardar empleados usando EntityClass.Save()
             await GenerarYGuardarEmpleadosAsync();
-            Log($"Empleados generados y guardados: {_empleados.Count}");
+            Log($"✓ Empleados generados: {_empleados.Count}");
 
-            // 3. Generar hechos por mes (con transacción implícita en Save)
             await GenerarHechosPorMesAsync();
-
-            // 4. Validar consistencia
             await ValidarConsistenciaAsync();
 
             Log("=== GENERACIÓN COMPLETADA ===");
         }
 
         // ====================================================================
-        // CARGA DE DIMENSIONES USANDO ENTITYCLASS.GET<T>()
+        // CARGA DE DIMENSIONES - CORREGIDO
         // ====================================================================
         private async Task CargarDimensionesAsync()
         {
-            // Usamos SimpleGet para lectura sin transacción explícita
+            // ✅ CORRECCIÓN: Usar SimpleGet para carga completa
             _estados = new Dim_Estado_Psicoemocional().SimpleGet<Dim_Estado_Psicoemocional>();
             _colorToEstadoId = _estados?.ToDictionary(e => e.Codigo_Color!, e => e.Id_Estado!.Value)
                 ?? new Dictionary<string, int>();
 
-            _areas = new Dim_Area_Psicoemocional().Where<Dim_Area_Psicoemocional>();
+            // ✅ CORRECCIÓN CRÍTICA: Usar SimpleGet + filtro Activo
+            _areas = new Dim_Area_Psicoemocional()
+                .SimpleGet<Dim_Area_Psicoemocional>()
+                .Where(a => a.Activo == true)
+                .ToList();
 
-            _servicios = new Dim_Servicio().Where<Dim_Servicio>();
+            _servicios = new Dim_Servicio()
+                .SimpleGet<Dim_Servicio>()
+                .Where(s => s.Activo == true)
+                .ToList();
 
             _evoluciones = new Dim_Tipo_Evolucion().SimpleGet<Dim_Tipo_Evolucion>();
+
+            // Validar carga
+            if (_areas == null || _areas.Count == 0)
+            {
+                Log("⚠️ ADVERTENCIA: _areas está vacío. Verificar Dim_Area_Psicoemocional en BD");
+            }
         }
 
         // ====================================================================
-        // GENERACIÓN Y GUARDADO DE EMPLEADOS USANDO ENTITYCLASS.SAVE()
+        // GENERACIÓN DE EMPLEADOS
         // ====================================================================
         private async Task GenerarYGuardarEmpleadosAsync()
         {
@@ -156,7 +166,6 @@ namespace Operations.SyntheticDataGenerator
                 var edad = _random.Next(18, 65);
                 var antiguedadYears = (decimal)(_random.NextDouble() * 20);
 
-                // Generar modelo interno para tracking
                 var empleadoModel = new EmpleadoModel
                 {
                     Id = i,
@@ -171,7 +180,6 @@ namespace Operations.SyntheticDataGenerator
                 };
                 _empleados.Add(empleadoModel);
 
-                // Crear entidad Dim_Usuario y guardar con EntityClass.Save()
                 var usuarioEntity = new Dim_Usuario
                 {
                     Id_Usuario_Origen = empleadoModel.IdUsuarioOrigen,
@@ -195,18 +203,15 @@ namespace Operations.SyntheticDataGenerator
                     Fecha_Carga = DateTime.Now
                 };
 
-                // ✅ GUARDADO USANDO ENTITYCLASS.SAVE() - Transacción implícita
-                if (usuarioEntity.Find<Dim_Usuario>() == null)
+                if (new Dim_Usuario { Id_Usuario_Origen = usuarioEntity.Id_Usuario_Origen }.Find<Dim_Usuario>() == null)
                 {
                     var result = usuarioEntity.Save();
-                    // Actualizar ID generado (si es identity)
                     if (result is int generatedId && generatedId > 0)
                     {
                         usuarioEntity.Id_Usuario = generatedId;
-                        empleadoModel.Id = generatedId; // Sincronizar para hechos
+                        empleadoModel.Id = generatedId;
                     }
                 }
-
             }
         }
 
@@ -229,7 +234,6 @@ namespace Operations.SyntheticDataGenerator
                 mesCount++;
                 Log($"Procesando mes: {fechaActual:yyyy-MM}");
 
-                // ✅ DataMapper maneja transacciones implícitas en Save()
                 await GenerarSeguimientoAsync(fechaActual);
                 await GenerarInteraccionesAsync(fechaActual);
                 await GenerarSolicitudesPsicologoAsync(fechaActual);
@@ -242,24 +246,21 @@ namespace Operations.SyntheticDataGenerator
         }
 
         // ====================================================================
-        // GENERAR SEGUIMIENTO USANDO ENTITYCLASS
+        // GENERAR SEGUIMIENTO - CORREGIDO
         // ====================================================================
         private async Task GenerarSeguimientoAsync(DateTime fechaMes)
         {
-            // Obtener o crear registro de fecha usando EntityClass
             var idFecha = await ObtenerOCrearFechaAsync(fechaMes);
 
             foreach (var empleado in _empleados)
             {
                 if (!empleado.Activo) continue;
 
-                // Calcular evolución de estado
                 var estadoAnterior = empleado.UltimoEstadoColor;
                 var estadoNuevo = CalcularNuevoEstado(estadoAnterior, empleado);
                 var evolucion = DeterminarEvolucion(estadoAnterior, estadoNuevo);
                 var areaPrincipal = _areas?.FirstOrDefault(a => a.Codigo_Area == "BG") ?? _areas?.First();
 
-                // ✅ Crear y guardar Fact_Seguimiento_Usuario
                 var seguimiento = new Fact_Seguimiento_Usuario
                 {
                     Id_Usuario = empleado.Id,
@@ -277,17 +278,32 @@ namespace Operations.SyntheticDataGenerator
                     Fecha_Carga = DateTime.Now
                 };
 
-                // ✅ GUARDADO CON TRANSACCIÓN IMPLÍCITA
                 var saveResult = seguimiento.Save();
-                var idSeguimiento = saveResult is long sid ? sid : (saveResult is int si ? (long)si : 0);
+                // ✅ CORRECCIÓN: Obtener ID correctamente post-guardado
+                var idSeguimiento = await ObtenerIdPostSaveAsync<Fact_Seguimiento_Usuario>(
+                    seguimiento, "Id_Seguimiento", saveResult);
 
-                // Generar detalle por cada área psicoemocional
-                if (_areas != null && idSeguimiento > 0)
+                // ✅ Generar detalle por cada área psicoemocional
+                if (_areas != null && _areas.Count > 0 && idSeguimiento > 0)
                 {
                     foreach (var area in _areas)
                     {
-                        var estadoAreaNuevo = CalcularNuevoEstadoPorArea(estadoAnterior, estadoNuevo);
+                        if (area.Id_Area == null) continue;
+
+                        var estadoAreaNuevo = CalcularNuevoEstadoPorArea(estadoAnterior, estadoNuevo, area);
                         var evolucionArea = DeterminarEvolucion(estadoAnterior, estadoAreaNuevo);
+
+                        int valorInicial = GetEstadoValor(estadoAnterior);
+                        int valorFinal = GetEstadoValor(estadoAreaNuevo);
+
+                        decimal puntajeInicial = Math.Round(valorInicial * 33.33m, 2, MidpointRounding.AwayFromZero);
+                        decimal puntajeFinal = Math.Round(valorFinal * 33.33m, 2, MidpointRounding.AwayFromZero);
+                        decimal variacion = Math.Round(puntajeFinal - puntajeInicial, 2, MidpointRounding.AwayFromZero);
+
+                        // Validar rangos DECIMAL(5,2)
+                        puntajeInicial = Math.Max(-99.99m, Math.Min(99.99m, puntajeInicial));
+                        puntajeFinal = Math.Max(-99.99m, Math.Min(99.99m, puntajeFinal));
+                        variacion = Math.Max(-99.99m, Math.Min(99.99m, variacion));
 
                         var detalle = new Fact_Detalle_Estado_Dimension
                         {
@@ -298,9 +314,9 @@ namespace Operations.SyntheticDataGenerator
                             Id_Estado_Inicial = _colorToEstadoId?[estadoAnterior] ?? 1,
                             Id_Estado_Final = _colorToEstadoId?[estadoAreaNuevo] ?? 1,
                             Id_Tipo_Evolucion = evolucionArea?.Id_Evolucion ?? 2,
-                            Puntaje_Inicial = GetEstadoValor(estadoAnterior) * 33.33m,
-                            Puntaje_Final = GetEstadoValor(estadoAreaNuevo) * 33.33m,
-                            Variacion_Puntaje = (GetEstadoValor(estadoAreaNuevo) - GetEstadoValor(estadoAnterior)) * 33.33m,
+                            Puntaje_Inicial = puntajeInicial,
+                            Puntaje_Final = puntajeFinal,
+                            Variacion_Puntaje = variacion,
                             Es_Dimension_Critica = area.Es_Dimension_Secundaria == true && estadoAreaNuevo == "Fresa",
                             Requiere_Atencion = estadoAreaNuevo == "Fresa",
                             Fecha_Carga = DateTime.Now
@@ -310,7 +326,6 @@ namespace Operations.SyntheticDataGenerator
                     }
                 }
 
-                // Actualizar tracking del empleado
                 empleado.UltimoEstadoColor = estadoNuevo;
                 empleado.UltimoEstadoId = _colorToEstadoId?[estadoNuevo] ?? 1;
                 empleado.UltimaFechaSeguimiento = fechaMes;
@@ -318,11 +333,34 @@ namespace Operations.SyntheticDataGenerator
         }
 
         // ====================================================================
-        // MÉTODOS AUXILIARES CON ENTITYCLASS
+        // MÉTODO AUXILIAR: Obtener ID post-Save - CORREGIDO
+        // ====================================================================
+        private async Task<long> ObtenerIdPostSaveAsync<T>(T entity, string idPropertyName, object? saveResult) where T : EntityClass
+        {
+            // Si Save() retornó un ID directo
+            if (saveResult is int intId && intId > 0) return intId;
+            if (saveResult is long longId && longId > 0) return longId;
+
+            // Si no, buscar la entidad recién guardada por su clave natural
+            // Para Fact_Seguimiento_Usuario, usamos combinación única
+            if (entity is Fact_Seguimiento_Usuario seguimiento)
+            {
+                var encontrado = new Fact_Seguimiento_Usuario().Find<Fact_Seguimiento_Usuario>(
+                    FilterData.Equal("Id_Usuario", seguimiento.Id_Usuario),
+                    FilterData.Equal("Id_Fecha_Seguimiento", seguimiento.Id_Fecha_Seguimiento),
+                    FilterData.Equal("Id_Area_Principal", seguimiento.Id_Area_Principal)
+                );
+                return encontrado?.Id_Seguimiento ?? 0;
+            }
+
+            return 0;
+        }
+
+        // ====================================================================
+        // OBTENER/CREAR FECHA - CORREGIDO
         // ====================================================================
         private async Task<int> ObtenerOCrearFechaAsync(DateTime fecha)
         {
-            // Intentar obtener fecha existente usando EntityClass.Find()
             var fechaExistente = new Dim_Tiempo().Find<Dim_Tiempo>(
                 FilterData.Equal("Fecha", fecha.Date)
             );
@@ -332,7 +370,6 @@ namespace Operations.SyntheticDataGenerator
                 return fechaExistente.Id_Tiempo.Value;
             }
 
-            // Crear nuevo registro de fecha
             var nuevaFecha = new Dim_Tiempo
             {
                 Fecha = fecha.Date,
@@ -352,8 +389,14 @@ namespace Operations.SyntheticDataGenerator
                 Fecha_Carga = DateTime.Now
             };
 
-            var result = nuevaFecha.Save();
-            return (result as Dim_Tiempo)?.Id_Tiempo ?? -1;
+            nuevaFecha.Save();
+
+            // ✅ CORRECCIÓN: Buscar el registro recién guardado
+            var fechaGuardada = new Dim_Tiempo().Find<Dim_Tiempo>(
+                FilterData.Equal("Fecha", fecha.Date)
+            );
+
+            return fechaGuardada?.Id_Tiempo ?? -1;
         }
 
         private int GetWeekNumber(DateTime date) =>
@@ -371,7 +414,6 @@ namespace Operations.SyntheticDataGenerator
 
             var probs = probabilidades[estadoAnterior].ToDictionary(k => k.Key, v => v.Value);
 
-            // Aplicar hipótesis H1 y H4
             if (empleado.AntiguedadYears > 5 && estadoAnterior == "Verde")
             {
                 probs["Verde"] += 0.10;
@@ -383,7 +425,6 @@ namespace Operations.SyntheticDataGenerator
                 probs["Naranja"] -= 0.03;
             }
 
-            // Normalizar y seleccionar
             var total = probs.Values.Sum();
             probs = probs.ToDictionary(k => k.Key, v => v.Value / total);
 
@@ -397,8 +438,57 @@ namespace Operations.SyntheticDataGenerator
             return estadoAnterior;
         }
 
-        private string CalcularNuevoEstadoPorArea(string anterior, string nuevo) =>
-            _random.NextDouble() < 0.85 ? nuevo : CalcularNuevoEstado(anterior, new EmpleadoModel { AntiguedadYears = 5, Contrato = "Indefinido" });
+        private string CalcularNuevoEstadoPorArea(string anterior, string nuevo, Dim_Area_Psicoemocional area)
+        {
+            if (_random.NextDouble() < 0.85)
+                return nuevo;
+
+            var esSecundaria = area.Es_Dimension_Secundaria ?? false;
+            var tipoBienestar = area.Tipo_Bienestar ?? "General";
+
+            var probabilidades = new Dictionary<string, double>();
+
+            if (esSecundaria)
+            {
+                probabilidades = new Dictionary<string, double>
+                {
+                    ["Verde"] = 0.50, ["Naranja"] = 0.35, ["Fresa"] = 0.15
+                };
+            }
+            else if (tipoBienestar == "Psicológico")
+            {
+                probabilidades = new Dictionary<string, double>
+                {
+                    ["Verde"] = 0.60, ["Naranja"] = 0.30, ["Fresa"] = 0.10
+                };
+            }
+            else if (tipoBienestar == "Laboral")
+            {
+                probabilidades = new Dictionary<string, double>
+                {
+                    ["Verde"] = 0.65, ["Naranja"] = 0.28, ["Fresa"] = 0.07
+                };
+            }
+            else
+            {
+                probabilidades = new Dictionary<string, double>
+                {
+                    ["Verde"] = 0.55, ["Naranja"] = 0.32, ["Fresa"] = 0.13
+                };
+            }
+
+            var total = probabilidades.Values.Sum();
+            probabilidades = probabilidades.ToDictionary(k => k.Key, v => v.Value / total);
+
+            var r = _random.NextDouble();
+            var acumulado = 0.0;
+            foreach (var kvp in probabilidades)
+            {
+                acumulado += kvp.Value;
+                if (r <= acumulado) return kvp.Key;
+            }
+            return anterior;
+        }
 
         private Dim_Tipo_Evolucion? DeterminarEvolucion(string inicial, string final)
         {
@@ -419,14 +509,11 @@ namespace Operations.SyntheticDataGenerator
 
         private int GetEstadoValor(string color) => color switch
         {
-            "Verde" => 3,
-            "Naranja" => 2,
-            "Fresa" => 1,
-            _ => 2
+            "Verde" => 3, "Naranja" => 2, "Fresa" => 1, _ => 2
         };
 
         // ====================================================================
-        // GENERAR INTERACCIONES, SOLICITUDES Y ABSENTISMO (Patrón similar)
+        // GENERAR INTERACCIONES
         // ====================================================================
         private async Task GenerarInteraccionesAsync(DateTime fechaMes)
         {
@@ -441,6 +528,12 @@ namespace Operations.SyntheticDataGenerator
 
                 foreach (var servicio in serviciosSel)
                 {
+                    decimal calificacion = Math.Round((decimal)(_random.NextDouble() * 2.0 + 3.0), 2, MidpointRounding.AwayFromZero);
+                    decimal completitud = Math.Round((decimal)(_random.NextDouble() * 20.0 + 80.0), 2, MidpointRounding.AwayFromZero);
+
+                    calificacion = Math.Max(1.00m, Math.Min(5.00m, calificacion));
+                    completitud = Math.Max(0.00m, Math.Min(100.00m, completitud));
+
                     var interaccion = new Fact_Interaccion_Servicio
                     {
                         Id_Usuario = empleado.Id,
@@ -448,8 +541,8 @@ namespace Operations.SyntheticDataGenerator
                         Id_Servicio = servicio.Id_Servicio,
                         Duracion_Real_Min = servicio.Duracion_Estimada_Min ?? _random.Next(15, 120),
                         Frecuencia_Acceso = _random.Next(1, 5),
-                        Calificacion_Usuario = Math.Round((decimal)_random.NextDouble(), 2),
-                        Completitud = Math.Round((decimal)_random.NextDouble(), 2), // 0.00 a 1.00
+                        Calificacion_Usuario = calificacion,
+                        Completitud = completitud,
                         Dispositivo = dispositivos[_random.Next(dispositivos.Length)],
                         Canal_Acceso = canales[_random.Next(canales.Length)],
                         Es_Recomendado = _random.NextDouble() < 0.3,
@@ -460,6 +553,9 @@ namespace Operations.SyntheticDataGenerator
             }
         }
 
+        // ====================================================================
+        // GENERAR SOLICITUDES DE PSICÓLOGO
+        // ====================================================================
         private async Task GenerarSolicitudesPsicologoAsync(DateTime fechaMes)
         {
             var idFecha = await ObtenerOCrearFechaAsync(fechaMes);
@@ -470,35 +566,35 @@ namespace Operations.SyntheticDataGenerator
             foreach (var empleado in seleccionados)
             {
                 var asiste = _random.NextDouble() < 0.8;
-
                 var fechaPrevistaReal = fechaMes.AddDays(_random.Next(1, 15));
                 var idFechaPrevista = await ObtenerOCrearFechaAsync(fechaPrevistaReal);
 
                 var solicitud = new Fact_Solicitud_Psicologo
                 {
                     Id_Usuario = empleado.Id,
-                    Id_Fecha_Solicitud = idFecha,  // ID del mes actual (ya obtenido)
-                    Id_Fecha_Prevista = idFechaPrevista,  // ✅ ID válido de fecha futura
-                    Id_Fecha_Atencion = asiste ? idFechaPrevista : null,  // Si asiste, misma fecha prevista
+                    Id_Fecha_Solicitud = idFecha,
+                    Id_Fecha_Prevista = idFechaPrevista,
+                    Id_Fecha_Atencion = asiste ? idFechaPrevista : null,
                     Solicita = "SI",
                     Tiene_Psicologo_Asignado = asiste ? "SI" : "NO",
                     Usuario_Asiste = asiste ? "SI" : "NO",
                     Solicitud_Empresa = _random.NextDouble() < 0.2 ? "SI" : "NO",
                     N_Solicitudes_Acumuladas = _random.Next(1, 4),
                     Sesiones_Consumidas = asiste ? _random.Next(1, 6) : 0,
-                    Sesiones_Pendientes = asiste ? 0 : _random.Next(1, 5),  // Si no asiste, hay pendientes
+                    Sesiones_Pendientes = asiste ? 0 : _random.Next(1, 5),
                     Tiempo_Espera_Dias = asiste ? _random.Next(0, 10) : null,
                     Tipo_Usuario = empleado.UltimoEstadoColor == "Fresa" ? "Tratamiento" : "Seguimiento",
                     Prioridad = empleado.UltimoEstadoColor == "Fresa" ? "Alta" : "Media",
                     Estado_Tratamiento = asiste ? "Activo" : "Pendiente",
                     Fecha_Carga = DateTime.Now
                 };
-
-                // ✅ Guardar usando EntityClass.Save() - transacción implícita
                 solicitud.Save();
             }
         }
 
+        // ====================================================================
+        // GENERAR ABSENTISMO - CORREGIDO FECHA FINAL
+        // ====================================================================
         private async Task GenerarAbsentismoAsync(DateTime fechaMes)
         {
             var idFecha = await ObtenerOCrearFechaAsync(fechaMes);
@@ -511,11 +607,15 @@ namespace Operations.SyntheticDataGenerator
                 var dias = _random.Next(1, 10);
                 var relacionado = empleado.UltimoEstadoColor == "Fresa" || _random.NextDouble() < 0.4;
 
+                // ✅ CORRECCIÓN: Calcular fecha real → obtener ID válido
+                var fechaFinalReal = fechaMes.AddDays(dias);
+                var idFechaFinal = await ObtenerOCrearFechaAsync(fechaFinalReal);
+
                 var absentismo = new Fact_Absentismo
                 {
                     Id_Usuario = empleado.Id,
                     Id_Fecha_Inicio = idFecha,
-                    Id_Fecha_Final = idFecha + dias,
+                    Id_Fecha_Final = idFechaFinal, // ✅ ID válido, no suma aritmética
                     Dias_Ausente = dias,
                     Justificado = _random.NextDouble() < 0.7,
                     Relacionado_Salud_Mental = relacionado,
@@ -529,7 +629,7 @@ namespace Operations.SyntheticDataGenerator
         }
 
         // ====================================================================
-        // VALIDACIÓN Y LOGGING
+        // VALIDACIÓN Y LOGGING - CORREGIDO
         // ====================================================================
         private async Task ValidarConsistenciaAsync()
         {
@@ -540,11 +640,32 @@ namespace Operations.SyntheticDataGenerator
             var totalInteracciones = new Fact_Interaccion_Servicio().Count();
 
             Log($"✓ Seguimientos: {totalSeguimientos}");
-            Log($"✓ Detalles: {totalDetalles}");
+            Log($"✓ Detalles por área: {totalDetalles}");
             Log($"✓ Interacciones: {totalInteracciones}");
+
+            // Validar que hay detalles por área
+            if (_areas != null && _areas.Count > 0 && totalSeguimientos > 0)
+            {
+                var detallesPorArea = new Fact_Detalle_Estado_Dimension()
+                    .SimpleGet<Fact_Detalle_Estado_Dimension>()
+                    .GroupBy(d => d.Id_Area)
+                    .Select(g => new { AreaId = g.Key, Count = g.Count() })
+                    .ToList();
+
+                Log($"✓ Áreas con detalles: {detallesPorArea.Count}/{_areas.Count}");
+                
+                if (detallesPorArea.Count == 0)
+                {
+                    Log(" ADVERTENCIA: No se generaron detalles. Verificar:");
+                    Log("  1. _areas no está vacío");
+                    Log("  2. idSeguimiento > 0 después de Save()");
+                    Log("  3. area.Id_Area no es null en el bucle");
+                }
+            }
         }
 
-        private void Log(string message) => Console.Write(message);
-        private void LogError(Exception ex, string message) => Console.Write(message);
+        // ✅ CORRECCIÓN: Console.WriteLine con salto de línea
+        private void Log(string message) => Console.WriteLine(message);
+        private void LogError(Exception ex, string message) => Console.WriteLine($"ERROR: {message} - {ex.Message}");
     }
 }

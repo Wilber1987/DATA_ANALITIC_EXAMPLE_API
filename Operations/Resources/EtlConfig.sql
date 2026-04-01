@@ -10,3 +10,12 @@ CREATE TABLE etl_config (
     CONSTRAINT UQ_Rango_Fechas UNIQUE (BeginDate, EndDate)
 );
 GO
+
+CREATE TABLE dbo.Log (
+	Id_Log int IDENTITY(1,1) NOT NULL,
+	LogType nvarchar(MAX) COLLATE Modern_Spanish_CI_AS NULL,
+	Fecha datetime NULL,
+	message varchar(MAX) COLLATE Modern_Spanish_CI_AS NULL,
+	body nvarchar(MAX) COLLATE Modern_Spanish_CI_AS NULL,
+	CONSTRAINT PK_CaseTable_Agendas PRIMARY KEY (Id_Log)
+);

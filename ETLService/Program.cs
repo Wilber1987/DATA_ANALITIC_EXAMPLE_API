@@ -42,11 +42,16 @@ if (app.Environment.IsDevelopment())
 // 👇 Usar CORS (DEBE ir antes de UseAuthorization y UseRouting si los usas)
 //app.UseCors("AllowAll"); // o "AllowFlutterApp" si prefieres ser más restrictivo
 
-app.UseCors(policy => policy
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-);
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseCors(policy => policy
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+    );
+}
+
 
 
 app.MapControllers();

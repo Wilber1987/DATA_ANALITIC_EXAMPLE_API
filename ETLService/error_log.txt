@@ -907,3 +907,177 @@ The statement has been terminated.
    at APPCORE.GDatosAbstract.ExcuteSqlQuery(String strQuery, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 172
    at APPCORE.BDCore.Abstracts.WDataMapper.InsertObject(EntityClass entity, Boolean fullInsert) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\DataMapper.cs:line 55
    at APPCORE.EntityClass.Save(Boolean fullInsert) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 168
+[4/1/2026 2:49:03 PM] ERROR: Max retries reached. Operation failed.: Arithmetic overflow error converting numeric to data type numeric.
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+[4/1/2026 2:49:03 PM] Transaction failed and connection restarted.: Arithmetic overflow error converting numeric to data type numeric.
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+[4/1/2026 2:49:03 PM] ERROR: Save entity: Arithmetic overflow error converting numeric to data type numeric.
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+   at APPCORE.GDatosAbstract.ExcuteSqlQuery(String strQuery, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 172
+   at APPCORE.BDCore.Abstracts.WDataMapper.InsertObject(EntityClass entity, Boolean fullInsert) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\DataMapper.cs:line 55
+   at APPCORE.EntityClass.Save(Boolean fullInsert) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 168
+[4/1/2026 3:04:27 PM] ERROR: Max retries reached. Operation failed.: Violation of UNIQUE KEY constraint 'UQ__dim_usua__0CEBAF0F8B9792B4'. Cannot insert duplicate key in object 'dbo.dim_usuario'. The duplicate key value is (EMP-00001).
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+[4/1/2026 3:04:27 PM] Transaction failed and connection restarted.: Violation of UNIQUE KEY constraint 'UQ__dim_usua__0CEBAF0F8B9792B4'. Cannot insert duplicate key in object 'dbo.dim_usuario'. The duplicate key value is (EMP-00001).
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+[4/1/2026 3:04:27 PM] ERROR: Save entity: Violation of UNIQUE KEY constraint 'UQ__dim_usua__0CEBAF0F8B9792B4'. Cannot insert duplicate key in object 'dbo.dim_usuario'. The duplicate key value is (EMP-00001).
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+   at APPCORE.GDatosAbstract.ExcuteSqlQuery(String strQuery, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 172
+   at APPCORE.BDCore.Abstracts.WDataMapper.InsertObject(EntityClass entity, Boolean fullInsert) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\DataMapper.cs:line 55
+   at APPCORE.EntityClass.Save(Boolean fullInsert) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 168
+[4/1/2026 3:05:44 PM] ERROR: Max retries reached. Operation failed.: Violation of UNIQUE KEY constraint 'UQ__dim_usua__0CEBAF0F8B9792B4'. Cannot insert duplicate key in object 'dbo.dim_usuario'. The duplicate key value is (EMP-00001).
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+[4/1/2026 3:05:45 PM] Transaction failed and connection restarted.: Violation of UNIQUE KEY constraint 'UQ__dim_usua__0CEBAF0F8B9792B4'. Cannot insert duplicate key in object 'dbo.dim_usuario'. The duplicate key value is (EMP-00001).
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+[4/1/2026 3:05:45 PM] ERROR: Save entity: Violation of UNIQUE KEY constraint 'UQ__dim_usua__0CEBAF0F8B9792B4'. Cannot insert duplicate key in object 'dbo.dim_usuario'. The duplicate key value is (EMP-00001).
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+   at APPCORE.GDatosAbstract.ExcuteSqlQuery(String strQuery, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 172
+   at APPCORE.BDCore.Abstracts.WDataMapper.InsertObject(EntityClass entity, Boolean fullInsert) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\DataMapper.cs:line 55
+   at APPCORE.EntityClass.Save(Boolean fullInsert) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 168
+[4/1/2026 3:06:53 PM] ERROR: Max retries reached. Operation failed.: Arithmetic overflow error converting numeric to data type numeric.
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+[4/1/2026 3:06:53 PM] Transaction failed and connection restarted.: Arithmetic overflow error converting numeric to data type numeric.
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+[4/1/2026 3:06:53 PM] ERROR: Save entity: Arithmetic overflow error converting numeric to data type numeric.
+The statement has been terminated.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at APPCORE.GDatosAbstract.<>c__DisplayClass28_0.<ExcuteSqlQuery>b__0() in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 178
+   at APPCORE.GDatosAbstract.ExecuteWithRetry(Func`1 operation, Int32 maxRetries) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 242
+   at APPCORE.GDatosAbstract.ExcuteSqlQuery(String strQuery, IDbConnection dbConnection, IDbTransaction dbTransaction, List`1 parameters) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\Abstracts\GDatosAbstract.cs:line 172
+   at APPCORE.BDCore.Abstracts.WDataMapper.InsertObject(EntityClass entity, Boolean fullInsert) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\BDCore\DataMapper.cs:line 55
+   at APPCORE.EntityClass.Save(Boolean fullInsert) in d:\repos\NETCORE\ETLService\AppCore\Data_Access\EntityStructure\EntityClass.cs:line 168
