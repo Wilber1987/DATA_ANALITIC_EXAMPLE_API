@@ -1,7 +1,7 @@
-﻿using BusinessLogic.Connection;
-using Operations.Category;
-using Operations.DataGenerator;
-using Operations.Time;
+﻿using APPCORE;
+using BusinessLogic.Connection;
+using Operations.SyntheticDataGenerator;
+using Operations.SyntheticDataGenerator.Model;
 
 namespace Operations;
 
@@ -17,7 +17,8 @@ public class StartServices
             new TimeOperation().Excute();
             
             DateOLAPOperation.UpdateLastUpdateDate(DateTime.Now);*/
-            await SyntheticDataGenerator.Start();
+          
+            await SyntheticDataGeneratorOperation.Start();
             Console.Write("############### END");
             return true;
         }

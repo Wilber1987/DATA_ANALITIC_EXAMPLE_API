@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Operations.DataGenerator.Entities.Dimensions;
 using Operations.DataGenerator.Entities.Facts;
 using APPCORE;
+using Operations.SyntheticDataGenerator.Model;
 
-namespace Operations.DataGenerator
+namespace Operations.SyntheticDataGenerator
 {
     // ========================================================================
     // CONFIGURACIÓN
@@ -46,7 +47,7 @@ namespace Operations.DataGenerator
     // ========================================================================
     // GENERADOR PRINCIPAL
     // ========================================================================
-    public class SyntheticDataGenerator
+    public class SyntheticDataGeneratorOperation
     {
         private readonly GeneratorConfig _config;
         private readonly Random _random;
@@ -61,18 +62,20 @@ namespace Operations.DataGenerator
         // Empleados generados en memoria
         private List<EmpleadoModel> _empleados = new();
 
-        public SyntheticDataGenerator(GeneratorConfig config)
+        public SyntheticDataGeneratorOperation(GeneratorConfig config)
         {
-            _config = config;           
+            _config = config;
             _random = new Random(config.Seed);
         }
 
         public static async Task Start()
         {
+            var startDate = new DateTime(2025, 1, 1);
+            var endDate = new DateTime(2026, 12, 31);
             var config = new GeneratorConfig
             {
-                FechaInicio = new DateTime(2025, 1, 1),
-                FechaFin = new DateTime(2026, 12, 31),
+                FechaInicio = startDate,
+                FechaFin = endDate,
                 TotalEmpleados = 500,
                 MinServiciosPorMes = 2,
                 MaxServiciosPorMes = 4,
@@ -81,8 +84,22 @@ namespace Operations.DataGenerator
                 Seed = 42
             };
 
-            var generator = new SyntheticDataGenerator(config);
-            await generator.EjecutarGeneracionAsync();
+            var registroExistente = new Etl_Config().Find<Etl_Config>(
+                FilterData.Equal("BeginDate", startDate),
+                FilterData.Equal("EndDate", endDate)
+            );
+
+            if (registroExistente == null)
+            {
+                var generator = new SyntheticDataGeneratorOperation(config);
+                await generator.EjecutarGeneracionAsync();
+                new Etl_Config
+                {
+                    Update_At = DateTime.Now,
+                    BeginDate = startDate,
+                    EndDate = endDate
+                }.Save();
+            }
         }
 
         public async Task EjecutarGeneracionAsync()
@@ -179,7 +196,7 @@ namespace Operations.DataGenerator
                 };
 
                 // ✅ GUARDADO USANDO ENTITYCLASS.SAVE() - Transacción implícita
-                if (usuarioEntity.Find<Dim_Usuario>() != null)
+                if (usuarioEntity.Find<Dim_Usuario>() == null)
                 {
                     var result = usuarioEntity.Save();
                     // Actualizar ID generado (si es identity)
