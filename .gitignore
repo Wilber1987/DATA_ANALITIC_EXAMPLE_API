@@ -427,4 +427,8 @@ UNAN_UI/bin/
 CAPA_DATOS/bin/
 UI_USAV/bin/UI/error_log.txt
 UI/error_log.txt
+Operations/obj/
+Operations/bin/
+ETLService/obj/
+ETLService/bin/
 
