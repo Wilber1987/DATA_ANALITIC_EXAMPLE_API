@@ -136,7 +136,10 @@ SELECT
     
     -- Tiempo
     t.Anio,
-    t.Trimestre
+    t.Trimestre,
+    t.Mes,
+    t.Nombre_Mes,
+    t.Fecha
 
 FROM Fact_Seguimiento_Usuario f
 INNER JOIN Dim_Usuario u ON f.Id_Usuario = u.Id_Usuario
@@ -207,8 +210,11 @@ SELECT
     
     -- Tiempo
     t.Anio,
+    t.Trimestre,
     t.Mes,
-    t.Trimestre
+    t.Nombre_Mes,
+    t.Fecha
+
 
 FROM Fact_Seguimiento_Usuario f
 INNER JOIN Dim_Usuario u ON f.Id_Usuario = u.Id_Usuario
@@ -271,7 +277,10 @@ SELECT
     
     -- Tiempo
     t.Anio,
-    t.Trimestre
+    t.Trimestre,
+    t.Mes,
+    t.Nombre_Mes,
+    t.Fecha
 
 FROM Fact_Seguimiento_Usuario f
 INNER JOIN Dim_Usuario u ON f.Id_Usuario = u.Id_Usuario
