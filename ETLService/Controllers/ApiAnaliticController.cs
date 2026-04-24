@@ -23,5 +23,11 @@ namespace ETLService.Controllers
         {
             return Ok(AnaliticAbsentismoOperation.GetByPeriodo(request));
         }
+
+        [HttpPost]
+        public ActionResult AntiguedadBienestar(DataAnaliticRequest request)
+        {
+            return Ok(AnaliticAntiguedadBienestarOperation.GetByPeriodo(request));
+        }
     }
 }
