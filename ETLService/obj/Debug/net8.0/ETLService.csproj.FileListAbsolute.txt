@@ -178,3 +178,5 @@ d:\repos\NETCORE\ETLService\ETLService\obj\Debug\net8.0\refint\ETLService.dll
 d:\repos\NETCORE\ETLService\ETLService\obj\Debug\net8.0\ETLService.pdb
 d:\repos\NETCORE\ETLService\ETLService\obj\Debug\net8.0\ETLService.genruntimeconfig.cache
 d:\repos\NETCORE\ETLService\ETLService\obj\Debug\net8.0\ref\ETLService.dll
+d:\repos\NETCORE\ETLService\ETLService\obj\Debug\net8.0\ETLService.RazorAssemblyInfo.cache
+d:\repos\NETCORE\ETLService\ETLService\obj\Debug\net8.0\ETLService.RazorAssemblyInfo.cs

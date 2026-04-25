@@ -27,15 +27,30 @@ namespace Operations.AnaliticOperations
         public static object? GetByPeriodo(DataAnaliticRequest request)
         {
             // Consulta a la vista/entidad
-            var bdData = new V_Analisis_Antiguedad_Bienestar().Where<V_Analisis_Antiguedad_Bienestar>(
+            var bdData = new V_Analisis_Antiguedad_Bienestar
+            {
+                orderData = [
+                OrdeData.Asc("Antiguedad_Years")
+            ]
+            }.Where<V_Analisis_Antiguedad_Bienestar>(
                 FilterData.GreaterEqual("Fecha", request.Desde),
                 FilterData.LessEqual("Fecha", request.Hasta)
             ); // 👈 Importante: materializar la consulta
 
+            var camposAgrupacion = request.GroupParams?.Select(p => p).ToList() ?? new List<string>();
+
+            var datosPreAgrupados = bdData
+                .GroupBy(d => string.Join("|",
+                    camposAgrupacion.Append("Id_Usuario") // Siempre incluir usuario
+                        .Select(c => GetPropertyValue(d, c)?.ToString() ?? "NULL")))
+                .Select(grupo => grupo.OrderByDescending(d => d.Fecha).First()) // ← Fecha máxima = estado válido
+                .ToList();
+
+
             // Ejecución del helper genérico
             var result = DataGroupingHelper.GroupData(
-                data: bdData,
-                groupParams: request.GroupParams,
+                data:   datosPreAgrupados.Cast<object>(),
+                groupParams: request.GroupParams ?? [],
                 evalParams: request.EvalParams,
                 modelObject: ModelObject,
                 title: "Test",
@@ -43,6 +58,13 @@ namespace Operations.AnaliticOperations
             );
 
             return result;
+        }
+
+        // Helper mínimo de reflexión (compatible con tu código existente)
+        private static object? GetPropertyValue(object obj, string propName)
+        {
+            if (obj == null || string.IsNullOrEmpty(propName)) return null;
+            return obj.GetType().GetProperty(propName)?.GetValue(obj);
         }
     }
 }

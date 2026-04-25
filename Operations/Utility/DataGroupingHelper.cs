@@ -36,6 +36,10 @@ namespace Operations.Utility
             string title,
             bool isFinalGroupedData = false)
         {
+            if (!groupParams.Contains(evalParams[0]))
+            {
+                groupParams.Add(evalParams[0]);
+            }
             var metricLevels = new Dictionary<string, object>();
 
             if (groupParams == null || groupParams.Count == 0)

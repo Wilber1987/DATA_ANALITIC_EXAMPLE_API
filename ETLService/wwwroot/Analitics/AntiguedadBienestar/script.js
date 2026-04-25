@@ -5,7 +5,7 @@ import { WAjaxTools } from "../../WDevCore/WModules/WAjaxTools.js"
 
 window.onload = async () => {
     const GroupParams = [
-        "Departamento_Area", "Antiguedad", "Estado_Final_Color"
+        "Anio", "Rango_Antiguedad", "Estado_Final_Color"
     ]
     const EvalParams = [
         "Estado_Final_Color"
@@ -18,11 +18,12 @@ window.onload = async () => {
     }
 
     const response = await WAjaxTools.PostRequest("/api/ApiAnalitic/AntiguedadBienestar", request);
-    document.body.append(new WBarChart({
+    document.body.querySelector("#mainContent")?.append(new WBarChart({
         // @ts-ignore
         data: response,
         GroupParams: GroupParams,
         EvalParams: EvalParams,
-        title: 'Bienestar X Antiguedad'
+        title: 'Bienestar X Antiguedad',
+        Colors : ["#27e512", "#e56412", "#e51212"]
     }));
 }
