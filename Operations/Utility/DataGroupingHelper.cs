@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Operations.EstadisticModule;
 
 namespace Operations.Utility
 {
@@ -28,7 +29,13 @@ namespace Operations.Utility
 
     public static class DataGroupingHelper
     {
-        public static object GroupData<T>(
+        public class DataGroupingResult
+        {
+            public object groupedData { get; set; }
+            public object metricLevels { get; set; }
+            public List<HipotesisTestResult> hipotesisTestResults { get; set; } = [];
+        }
+        public static DataGroupingResult GroupData<T>(
             IEnumerable<T> data,
             List<string> groupParams,
             List<string> evalParams,
@@ -47,9 +54,14 @@ namespace Operations.Utility
                 metricLevels[title ?? "Reporte"] = CalculateSummary(data.Cast<object>().ToList(), null,
                     data.Cast<object>().ToList().Count, evalParams, modelObject, isFinalGroupedData);
 
-                return new Dictionary<string, object>
+                /*return new Dictionary<string, object>
                 {
                     [title ?? "Reporte"] = data
+                };*/
+                return new DataGroupingResult
+                {
+                    groupedData = data,
+                    metricLevels = metricLevels
                 };
             }
 
@@ -200,10 +212,10 @@ namespace Operations.Utility
                 CalculateSummary(data.Cast<object>().ToList(), null, data.Cast<object>().ToList().Count,
                  evalParams, modelObject, isFinalGroupedData);
 
-            return new
+            return new DataGroupingResult
             {
-                groupedData,
-                metricLevels
+                groupedData = groupedData,
+                metricLevels = metricLevels
             };
         }
 

@@ -25,9 +25,9 @@ namespace ETLService.Controllers
         }
 
         [HttpPost]
-        public ActionResult AntiguedadBienestar(DataAnaliticRequest request)
+        public async Task<ActionResult> AntiguedadBienestar(DataAnaliticRequest request)
         {
-            return Ok(AnaliticAntiguedadBienestarOperation.GetByPeriodo(request));
+            return Ok(await AnaliticAntiguedadBienestarOperation.GetByPeriodo(request));
         }
     }
 }
