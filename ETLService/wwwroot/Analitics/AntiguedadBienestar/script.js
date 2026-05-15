@@ -24,7 +24,7 @@ window.onload = async () => {
         GroupParams: GroupParams,
         EvalParams: EvalParams,
         title: 'Bienestar X Antiguedad',
-        Colors: ["#27e512", "#e56412", "#e51212"]
+        Colors: [ "#e56412","#27e512", "#e51212"]
     }));
     document.body.querySelector("#mainContent")?.append(generarTarjetasHipotesis(response.hipotesisTestResults))
 }
